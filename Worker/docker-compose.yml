@@ -1,0 +1,18 @@
+version: "3.7"
+
+services:
+  worker:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: on-failure
+    env_file:
+      - .env
+    volumes:
+      - .:/code
+    networks:
+      - signing-net
+
+networks:
+  signing-net:
+    external: true

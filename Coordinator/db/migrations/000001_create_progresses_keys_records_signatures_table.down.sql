@@ -1,0 +1,4 @@
+DROP TABLE IF EXISTS progresses;
+DROP TABLE IF EXISTS records;
+DROP TABLE IF EXISTS secret_keys;
+DROP TABLE IF EXISTS signatures;

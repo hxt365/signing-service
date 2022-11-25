@@ -1,0 +1,41 @@
+version: "3.7"
+
+services:
+  mysql:
+    image: mysql:8
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
+    environment:
+      - MYSQL_DATABASE=${DATABASE_NAME}
+      - MYSQL_USER=${DATABASE_USER}
+      - MYSQL_PASSWORD=${DATABASE_PASSWORD}
+      - MYSQL_ROOT_PASSWORD=${DATABASE_ROOT_PASSWORD}
+    volumes:
+      - mysql-data:/var/lib/mysql
+    ports:
+      - ${EXPOSED_DATABASE_PORT}:${DATABASE_PORT}
+    networks:
+      - signing-net
+  coordinator:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: on-failure
+    env_file:
+      - .env
+    volumes:
+      - .:/code
+    ports:
+      - ${APPLICATION_PORT}:${APPLICATION_PORT}
+    depends_on:
+      - mysql
+    networks:
+      - signing-net
+
+volumes:
+  mysql-data:
+
+networks:
+  signing-net:
+    driver: bridge
+    name: signing-net
